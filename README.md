@@ -6,7 +6,7 @@ Each control is implemented as a reusable component to simplify building modern,
 ## Features
 
 - Easy-to-use custom controls (e.g., DropDown)
-- Clean, readable code
+- Clean, readable code (Maybe not LOL)
 - Designed for extensibility (more controls coming soon)
 
 ## Usage
