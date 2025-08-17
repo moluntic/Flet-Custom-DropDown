@@ -1,0 +1,206 @@
+import asyncio
+import time
+import flet as ft
+
+
+BUTTON_HEIGHT = 30
+DEFAULT_BG = "white,0.03"
+DEFAULT_BORDER = ft.border.all(width=1, color='white,0.1')
+DEFAULT_RADIUS = 10
+
+
+class OverlayMenu(ft.Container):
+    """
+    Custom overlay menu for option selection.
+    """
+
+    def __init__(
+        self,
+        left: float = 0,
+        top: float = 0,
+        width: float = 200,
+        on_select: callable = None,
+        options=None,
+        max_visible: int = 3,
+    ):
+        super().__init__()
+        self._left = left
+        self._top = top
+        self._width = width
+        self.options = options or []
+        self.max_visible = max_visible
+        self.on_select = on_select
+        self.height_button = BUTTON_HEIGHT
+        self.menu = None
+        self.on_click = self.remove_menu
+
+    def _build_button(self, text):
+        def on_hover(e):
+            color = 'white,0.1'
+            e.control.bgcolor = color if e.control.bgcolor != color else "white,0.00"
+            e.control.update()
+
+        return ft.Container(
+            content=ft.Text(text, size=16, color='white,0.8'),
+            on_click=lambda e: (self.on_select(text), self.remove_menu(e)),
+            height=self.height_button,
+            on_hover=on_hover,
+            padding=ft.padding.only(left=10),
+            bgcolor='white,0.00',
+            alignment=ft.alignment.center_left
+        )
+
+    def _build_menu_content(self):
+        return ft.Column(
+            [self._build_button(option) for option in self.options],
+            scroll=ft.ScrollMode.AUTO,
+            spacing=0
+        )
+
+    def _create_menu(self):
+        self.menu = ft.Container(
+            height=0,
+            width=self._width,
+            left=self._left,
+            top=self._top,
+            border_radius=DEFAULT_RADIUS,
+            blur=10,
+            bgcolor=DEFAULT_BG,
+            opacity=0,
+            animate_opacity=ft.Animation(duration=300, curve=ft.AnimationCurve.LINEAR_TO_EASE_OUT),
+            animate=ft.Animation(duration=300, curve=ft.AnimationCurve.LINEAR_TO_EASE_OUT),
+            border=DEFAULT_BORDER,
+            content=self._build_menu_content()
+        )
+        return self.menu
+
+    async def async_remove_menu(self, e):
+        self.menu.height = 0
+        self.menu.opacity = 0
+        self.menu.update()
+        await asyncio.sleep(0.01)
+        self.page.overlay.remove(self)
+        self.page.update()
+    
+    def remove_menu(self,e):
+        self.page.run_task(self.async_remove_menu,e)
+
+    async def on_mount(self):
+        self.page.update()
+        self._create_menu()
+        self.page.overlay.append(self.menu)
+        self.page.update()
+        await asyncio.sleep(0.02)
+        count = len(self.options)
+        self.menu.height = self.height_button * min(count, self.max_visible)
+        self.menu.opacity = 1
+        self.menu.update()
+
+    def did_mount(self):
+        self.page.run_task(self.on_mount)
+        return super().did_mount()
+
+
+class DropDown(ft.Container):
+    """
+    Custom DropDown Menu.
+    """
+
+    def __init__(
+        self,
+        height: float = 40,
+        width: float = 70,
+        menu_text_style: ft.TextStyle = ft.TextStyle(size=15, color='white,0.8'),
+        default_value: str = "None",
+        options=None,
+        on_select: callable = None,
+        max_visible: int = 3,
+    ):
+        super().__init__()
+        self.on_select = on_select
+        self.menu_text_style = menu_text_style
+        self.max_visible = max_visible
+        self.options = options or []
+        self.default_value = default_value
+        self.height = height
+        self.width = width
+        self.blur = 10
+        self.border_radius = DEFAULT_RADIUS
+        self.bgcolor = DEFAULT_BG
+        self.border = DEFAULT_BORDER
+        self.on_hover = self._on_hover
+        self.text_display = ft.Text(value=self.default_value, style=self.menu_text_style)
+        self.content = self._build_content()
+
+    def _on_hover(self, e):
+        color = 'white,0.06'
+        e.control.bgcolor = color if e.control.bgcolor != color else DEFAULT_BG
+        e.control.update()
+
+    def get_value(self):
+        return self.text_display.value
+
+    def _on_select(self, value):
+        if self.on_select:
+            self.on_select(value)
+        self.text_display.value = value
+        self.text_display.update()
+
+    def on_tap_up(self, e: ft.TapEvent):
+        top_left_x = e.global_x - e.local_x
+        top_left_y = e.global_y - e.local_y + self.height + 5
+        self.page.overlay.append(
+            OverlayMenu(
+                left=top_left_x,
+                top=top_left_y,
+                width=self.width,
+                on_select=self._on_select,
+                options=self.options,
+                max_visible=self.max_visible
+            )
+        )
+        self.page.update()
+
+    def _build_content(self):
+        return ft.GestureDetector(
+            content=ft.Container(self.text_display, alignment=ft.alignment.center),
+            on_tap_up=self.on_tap_up
+        )
+
+# EXAMPLE USAGE
+
+if __name__ == "__main__":
+    def main(page: ft.Page):
+        page.vertical_alignment = ft.MainAxisAlignment.CENTER
+        page.horizontal_alignment = ft.CrossAxisAlignment.CENTER
+        
+        
+        image = ft.Image(
+            opacity=0.8,
+            src="https://i2.wp.com/r1.ilikewallpaper.net/ipad-pro-wallpapers/download/101380/mixed-colours-abstract-4k-ipad-pro-wallpaper-ilikewallpaper_com.jpg",
+            )
+
+        drop_down = DropDown(
+                        default_value="Select an option",
+                        width=200,
+                        height=30,
+                        max_visible=6,
+                        on_select=lambda value: print(f"Selected: {value}"),
+                        options=[
+                            f"Option {i}" for i in range(1, 20)
+                        ]
+            )
+        
+        stack = ft.Stack([
+            ft.Container(image,alignment=ft.alignment.center),
+            ft.Container(
+                drop_down,
+                alignment=ft.alignment.center,
+            ),
+        ],expand=True)
+        page.add(
+            stack
+        )
+        page.update()
+
+    ft.app(main)
