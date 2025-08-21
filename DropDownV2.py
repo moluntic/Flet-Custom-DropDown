@@ -217,3 +217,41 @@ class DropDown(ft.Container):
             on_tap_up=self.on_tap_up,
             mouse_cursor=ft.MouseCursor.CLICK
         )
+
+
+if __name__ == "__main__":
+    def main(page: ft.Page):
+        page.vertical_alignment = ft.MainAxisAlignment.CENTER
+        page.horizontal_alignment = ft.CrossAxisAlignment.CENTER
+        page.theme_mode = ft.ThemeMode.LIGHT
+        
+        
+        image = ft.Image(
+            opacity=0.8,
+            src="https://eskipaper.com/images/light-wallpapers-1.jpg",
+            )
+
+        drop_down = DropDown(
+                        default_value="Select an option",
+                        width=200,
+                        height=30,
+                        max_visible=6,
+                        on_select=lambda value: print(f"Selected: {value}"),
+                        options=[
+                            f"Option {i}" for i in range(1, 20)
+                        ]
+            )
+        
+        stack = ft.Stack([
+            ft.Container(image,alignment=ft.alignment.center),
+            ft.Container(
+                drop_down,
+                alignment=ft.alignment.center,
+            ),
+        ],expand=True)
+        page.add(
+            stack
+        )
+        page.update()
+
+    ft.app(main)
