@@ -32,6 +32,6 @@ See the code comments and examples in each file for details.
 
 
 # Contributors:
-- [Moluntic](https://github.com/moluntic)
+- [Moluntic](https://github.com/moluntic) - Added theme support (Light / Dark)
 
 More controls will be added in the future.
