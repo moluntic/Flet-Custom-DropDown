@@ -16,7 +16,7 @@ See the code comments and examples in each file for details.
 
 ## Controls
 
-- `DropDownV2.py` — Custom drop-down menu with overlay selection
+- ## `DropDownV2.py` — Custom drop-down menu with overlay selection
 
   **Parameters:**
   - `height` (`float`): Height of the DropDown (default: 40)
@@ -34,7 +34,7 @@ See the code comments and examples in each file for details.
 
 
 
-- `MenuSwitcher.py` - Custom Switcher AKA liquid glass 
+- ## `MenuSwitcher.py` - Custom Switcher AKA liquid glass 
 
   **Parameters**
   - `labels` (`list[str]`): Text values to show in menu
@@ -45,7 +45,7 @@ See the code comments and examples in each file for details.
 
 
   **Support Features:**
-    - returns enum with index and label of selected item. `EventSelect(index=0, label='Menu')`
+    - Returns enum with index and label of selected item. `EventSelect(index=0, label='Menu')`
     - Draggable Selector
     - Cool animation (lol)
   
@@ -65,6 +65,7 @@ See the code comments and examples in each file for details.
 
     ft.app(target=main)
     ```
+  > ⚠️ **MORE SETTINGS WILL BE IN FUTURE**
 
 
 # Contributors:
