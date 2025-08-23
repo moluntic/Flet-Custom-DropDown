@@ -40,9 +40,14 @@ See the code comments and examples in each file for details.
   - `labels` (`list[str]`): Text values to show in menu
   - `width` (`int`): Width of the MenuSwitcher (default: 400)
   - `on_selected` (`callable`): Callback function that is called after a menu item is selected.
+  - <img width="496" height="158" alt="image" src="https://github.com/user-attachments/assets/8df064e3-925c-4b1d-85e8-84ca3d6eb6ef" />
+  - <img width="506" height="132" alt="image" src="https://github.com/user-attachments/assets/d2e62b4c-fbdc-4266-a72f-c44f3c686b06" />
+
 
   **Support Features:**
     - returns enum with index and label of selected item. `EventSelect(index=0, label='Menu')`
+    - Draggable Selector
+    - Cool animation (lol)
   
   **Example Usage:**
     ```
