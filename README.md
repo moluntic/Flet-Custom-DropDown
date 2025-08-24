@@ -16,7 +16,7 @@ See the code comments and examples in each file for details.
 
 ## Controls
 
-- ## `DropDownV2.py` — Custom drop-down menu with overlay selection
+- ## `DropDown.py` — Custom drop-down menu with overlay selection
 
   **Parameters:**
   - `height` (`float`): Height of the DropDown (default: 40)
@@ -26,11 +26,13 @@ See the code comments and examples in each file for details.
   - `options` (`list[str]`): List of selectable options (default: [])
   - `on_select` (`callable`): Callback function called when an option is selected (default: None)
   - `max_visible` (`int`): Maximum number of visible options in overlay (default: 3)
+  - `disabled` (bool): Disable control if set to `True`. No interactions (default: False)
   - <img width="264" height="298" alt="image" src="https://github.com/user-attachments/assets/a7842d91-d3b5-4d09-823f-b356ca4f8545" />
   - <img width="300" height="328" alt="image" src="https://github.com/user-attachments/assets/d41f5086-5a6e-4a56-b2c0-79260783b9e1" />
 
   **Support Features:**
-    - Light/Dark Theme. 
+    - Light/Dark Theme.
+    - Disabling/Enabling with color changing. 
 
 
 
